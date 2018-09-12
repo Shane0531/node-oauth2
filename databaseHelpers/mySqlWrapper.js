@@ -1,27 +1,24 @@
 module.exports = {
-
   query: query
-}
+};
 
 //get the mySql object
-const mySql = require('mysql')
+const mySql = require("mysql");
 
 //object which holds the connection to the db
-let connection = null
+let connection = null;
 
 /**
  * Create the connection to the db
  */
 function initConnection() {
-
   //set the global connection object
-   connection = mySql.createConnection({
-
-    host: 'localhost',
-    user: 'root',
-    password: 'databasePassword',
-    database: 'oAuth2Test'
-  })
+  connection = mySql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "oAuth2Test"
+  });
 }
 
 /**
@@ -31,26 +28,22 @@ function initConnection() {
  * @param queryString
  * @param callback - takes a DataResponseObject
  */
-function query(queryString, callback){
-
+function query(queryString, callback) {
   //init the connection object. Needs to be done everytime as we call end()
   //on the connection after the call is complete
-  initConnection()
+  initConnection();
 
   //connect to the db
-  connection.connect()
+  connection.connect();
 
   //execute the query and collect the results in the callback
-  connection.query(queryString, function(error, results, fields){
-
-      console.log('mySql: query: error is: ', error, ' and results are: ', results);
-
+  connection.query(queryString, function(error, results, fields) {
     //disconnect from the method
     connection.end();
 
     //send the response in the callback
-    callback(createDataResponseObject(error, results))
-  })
+    callback(createDataResponseObject(error, results));
+  });
 }
 
 /**
@@ -62,9 +55,8 @@ function query(queryString, callback){
  * @return {DataResponseObject<{error, results}>}
  */
 function createDataResponseObject(error, results) {
-
-    return {
-      error: error,
-      results: results === undefined ? null : results === null ? null : results
-     }
-  }
+  return {
+    error: error,
+    results: results === undefined ? null : results === null ? null : results
+  };
+}
