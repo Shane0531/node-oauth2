@@ -7,7 +7,8 @@ const db = new Sequelize(
   {
     host: "localhost", // 데이터베이스 호스트
     dialect: "mysql",
-    timezone: "+09:00"
+    timezone: "+09:00",
+    logging: false
   }
 );
 

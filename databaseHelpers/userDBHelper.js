@@ -44,19 +44,15 @@ function getUserFromCrentials(username, password, callback) {
 }
 
 function doesUserExist(username, callback) {
-  const doesUserExistQuery = `SELECT * FROM users WHERE username = '${username}'`;
-
-  const sqlCallback = dataResponseObject => {
-    //calculate if user exists or assign null if results is null
-    const doesUserExist =
-      dataResponseObject.results !== null
-        ? dataResponseObject.results.length > 0
-          ? true
-          : false
-        : null;
-
-    callback(dataResponseObject.error, doesUserExist);
-  };
-
-  mySqlConnection.query(doesUserExistQuery, sqlCallback);
+  Users.findOne({
+    where: {
+      username: username
+    }
+  })
+    .then(item => {
+      callback(null, item ? true : false);
+    })
+    .catch(err => {
+      callback(true, err);
+    });
 }
