@@ -35,11 +35,10 @@ const bodyParser = require("body-parser");
 
 expressApp.use(bodyParser.urlencoded({ extended: true }));
 
-expressApp.use(expressApp.oauth.errorHandler());
-
 expressApp.use("/auth", authRoutes);
-
 expressApp.use("/restrictedArea", restrictedAreaRoutes);
+
+expressApp.use(expressApp.oauth.errorHandler());
 
 expressApp.listen(port, () => {
   console.log(`listening on port ${port}`);

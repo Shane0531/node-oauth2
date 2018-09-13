@@ -10,6 +10,9 @@ const accessTokenModel = db.define(
     },
     user_id: {
       type: Sequelize.INTEGER
+    },
+    expire_date: {
+      type: Sequelize.DATE
     }
   },
   {
@@ -18,6 +21,6 @@ const accessTokenModel = db.define(
   }
 );
 
-const accessToken = db.models.access_token;
+const AccessToken = db.models.access_tokens;
 
-exports.accessToken = accessToken;
+exports.AccessToken = AccessToken;

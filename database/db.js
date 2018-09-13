@@ -6,7 +6,8 @@ const db = new Sequelize(
   "", // 비밀번호
   {
     host: "localhost", // 데이터베이스 호스트
-    dialect: "mysql"
+    dialect: "mysql",
+    timezone: "+09:00"
   }
 );
 
