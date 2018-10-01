@@ -14,7 +14,7 @@ module.exports = injectedMySqlConnection => {
 
 function saveAccessToken(accessToken, userID, callback) {
   db.query(
-    "INSERT INTO access_tokens (access_token, user_id, expire_date) VALUES (:accessToken, :userID,DATE_ADD(NOW(), INTERVAL 3600 SECOND)) ON DUPLICATE KEY UPDATE access_token = :accessToken",
+    "INSERT INTO access_tokens (access_token, user_id, expire_date) VALUES (:accessToken, :userID,DATE_ADD(NOW(), INTERVAL 7200 SECOND)) ON DUPLICATE KEY UPDATE access_token = :accessToken",
     {
       replacements: { accessToken: accessToken, userID: userID },
       type: db.QueryTypes.INSERT,

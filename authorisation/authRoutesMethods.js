@@ -10,8 +10,6 @@ module.exports = injectedUserDBHelper => {
 };
 
 function registerUser(req, res) {
-  console.log(`authRoutesMethods: registerUser: req.body is:`, req.body);
-
   userDBHelper.doesUserExist(req.body.username, (sqlError, doesUserExist) => {
     if (sqlError !== null || doesUserExist) {
       const message =
@@ -34,8 +32,8 @@ function registerUser(req, res) {
 function login(registerUserQuery, res) {}
 
 function sendResponse(res, message, error) {
-  res.status(error !== null ? (error !== null ? 400 : 200) : 400).json({
-    status: message == "Operation unsuccessful" ? 200 : 400,
+  res.status(error == null ? 200 : 400).json({
+    status: message == "Registration was successful" ? 200 : 400,
     message: message,
     error: error
   });
