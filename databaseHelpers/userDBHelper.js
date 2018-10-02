@@ -16,7 +16,7 @@ module.exports = injectedMySqlConnection => {
 //TODO 13세미만 허용안되는 로직 추가해야함
 function registerUserInDB(payload, registrationCallback) {
   console.log(payload);
-  const email = payload.email;
+  const email = payload.email.trim();
   const password = payload.password;
   const nickname = payload.nickname;
   const realname = payload.realname;
@@ -39,7 +39,8 @@ function registerUserInDB(payload, registrationCallback) {
       locale: locale,
       gender: gender,
       country_code: countryCode,
-      birthday: birthDayDate
+      birthday: birthDayDate,
+      converted_email: convertEmail(email)
     });
   });
   registrationCallback();
@@ -54,7 +55,7 @@ function getUserFromCrentials(email, password, callback) {
   })
     .then(item => {
       bcrypt
-        .compare(passwd, item.dataValues.user_password.substring(1))
+        .compare(password, item.dataValues.passwd.substring(1))
         .then(res => {
           if (res) callback(false, item);
           else callback(false, null);
@@ -70,7 +71,7 @@ function getUserFromCrentials(email, password, callback) {
 function doesUserExist(email, callback) {
   Users.findOne({
     where: {
-      email: email
+      converted_email: email
     }
   })
     .then(item => {
@@ -79,4 +80,15 @@ function doesUserExist(email, callback) {
     .catch(err => {
       callback(true, err);
     });
+}
+
+//Gmail은 .이 낑기든말든 같은 이메일로 인식한다. 따라서 이것들을 걸러내기위해 .이 들어있지않은 필드를 따로 저장하도록한다
+function convertEmail(email) {
+  const split = email.split("@");
+  const bear = split[1].toLowerCase();
+  if (bear == "gmail.com" || bear == "googlemail.com") {
+    return split[0].replace(/\./gi, "") + "@" + split[1];
+  } else {
+    return email;
+  }
 }

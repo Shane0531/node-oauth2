@@ -39,7 +39,7 @@ function getUser(username, password, callback) {
 }
 
 function saveAccessToken(accessToken, clientID, expires, user, callback) {
-  accessTokensDBHelper.saveAccessToken(accessToken, user.id, callback);
+  accessTokensDBHelper.saveAccessToken(accessToken, user.idx, callback);
 }
 
 function getAccessToken(bearerToken, callback) {
