@@ -8,7 +8,7 @@ function accessRestrictedArea(req, res) {
   const userId = req.user.id;
   Users.findOne({
     where: {
-      id: userId
+      idx: userId
     }
   })
     .then(item => {
@@ -26,7 +26,7 @@ function accessRestrictedArea(req, res) {
 
 function makeDTO(item) {
   let result = {};
-  result["id"] = item.dataValues.id;
-  result["username"] = item.dataValues.username;
+  result["idx"] = item.dataValues.idx;
+  result["email"] = item.dataValues.email;
   return result;
 }

@@ -2,16 +2,20 @@ const Sequelize = require("sequelize");
 const { db } = require("../db");
 
 const accessTokenModel = db.define(
-  "access_tokens",
+  "user_token",
   {
-    access_token: {
-      type: Sequelize.STRING,
-      primaryKey: true
+    idx: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-    user_id: {
+    user_idx: {
       type: Sequelize.INTEGER
     },
-    expire_date: {
+    token: {
+      type: Sequelize.STRING
+    },
+    expiry_date: {
       type: Sequelize.DATE
     }
   },
@@ -21,6 +25,6 @@ const accessTokenModel = db.define(
   }
 );
 
-const AccessToken = db.models.access_tokens;
+const AccessToken = db.models.user_token;
 
 exports.AccessToken = AccessToken;

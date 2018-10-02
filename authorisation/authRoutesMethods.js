@@ -10,7 +10,7 @@ module.exports = injectedUserDBHelper => {
 };
 
 function registerUser(req, res) {
-  userDBHelper.doesUserExist(req.body.username, (sqlError, doesUserExist) => {
+  userDBHelper.doesUserExist(req.body.email, (sqlError, doesUserExist) => {
     if (sqlError !== null || doesUserExist) {
       const message =
         sqlError !== null ? "Operation unsuccessful" : "User already exists";
@@ -21,7 +21,7 @@ function registerUser(req, res) {
 
       return;
     }
-    userDBHelper.registerUserInDB(req.body.username, req.body.password, () => {
+    userDBHelper.registerUserInDB(req.body, () => {
       const message = "Registration was successful";
 
       sendResponse(res, message, (error = null));

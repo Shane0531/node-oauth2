@@ -14,7 +14,7 @@ module.exports = injectedMySqlConnection => {
 
 function saveAccessToken(accessToken, userID, callback) {
   db.query(
-    "INSERT INTO access_tokens (access_token, user_id, expire_date) VALUES (:accessToken, :userID,DATE_ADD(NOW(), INTERVAL 7200 SECOND)) ON DUPLICATE KEY UPDATE access_token = :accessToken",
+    "INSERT INTO user_token (user_idx, token, expiry_date) VALUES (:userID, :accessToken,DATE_ADD(NOW(), INTERVAL 7200 SECOND)) ON DUPLICATE KEY UPDATE token = :accessToken",
     {
       replacements: { accessToken: accessToken, userID: userID },
       type: db.QueryTypes.INSERT,
@@ -32,13 +32,13 @@ function saveAccessToken(accessToken, userID, callback) {
 function getUserIDFromBearerToken(bearerToken, callback) {
   AccessToken.findOne({
     where: {
-      access_token: bearerToken
+      token: bearerToken
     }
   })
     .then(item => {
       if (item) {
-        const userID = item.dataValues.user_id;
-        const expiredDate = item.dataValues.expire_date;
+        const userID = item.dataValues.user_idx;
+        const expiredDate = item.dataValues.expiry_date;
         const accessTokens = {
           user: {
             id: userID
@@ -46,6 +46,8 @@ function getUserIDFromBearerToken(bearerToken, callback) {
           expires: expiredDate
         };
         callback(false, accessTokens);
+      } else {
+        callback(false, null);
       }
     })
     .catch(err => {

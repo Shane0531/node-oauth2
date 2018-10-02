@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 
 const db = new Sequelize(
-  "oAuth2Test", // 데이터베이스 이름
+  "crowdfunding", // 데이터베이스 이름
   "root", // 유저 명
   "", // 비밀번호
   {

@@ -41,5 +41,6 @@ expressApp.use("/restrictedArea", restrictedAreaRoutes);
 expressApp.use(expressApp.oauth.errorHandler());
 
 expressApp.listen(port, () => {
+  console.log("auth server started");
   console.log(`listening on port ${port}`);
 });
