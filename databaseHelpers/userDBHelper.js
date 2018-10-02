@@ -1,5 +1,5 @@
 const { db } = require("../database/db");
-const { Users } = require("../database/model/users");
+const { Users, TermsLevel } = require("../database/model/users");
 const bcrypt = require("bcrypt");
 let mySqlConnection;
 
@@ -40,7 +40,8 @@ function registerUserInDB(payload, registrationCallback) {
       gender: gender,
       country_code: countryCode,
       birthday: birthDayDate,
-      converted_email: convertEmail(email)
+      converted_email: convertEmail(email),
+      terms_level: TermsLevel
     });
   });
   registrationCallback();
