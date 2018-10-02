@@ -8,7 +8,8 @@ module.exports = injectedMySqlConnection => {
 
   return {
     saveAccessToken: saveAccessToken,
-    getUserIDFromBearerToken: getUserIDFromBearerToken
+    getUserIDFromBearerToken: getUserIDFromBearerToken,
+    saveAutoLoginToken: saveAutoLoginToken
   };
 };
 
@@ -19,6 +20,22 @@ function saveAccessToken(accessToken, userID, callback) {
       replacements: { accessToken: accessToken, userID: userID },
       type: db.QueryTypes.INSERT,
       model: accessToken
+    }
+  )
+    .then(result => {
+      callback(null);
+    })
+    .catch(err => {
+      callback(err);
+    });
+}
+
+function saveAutoLoginToken(token, callback) {
+  db.query(
+    "UPDATE user_token SET expiry_date=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE token = :token",
+    {
+      replacements: { token: token },
+      type: db.QueryTypes.UPDATE
     }
   )
     .then(result => {

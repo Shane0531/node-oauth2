@@ -3,7 +3,6 @@ let accessTokensDBHelper;
 
 module.exports = (injectedUserDBHelper, injectedAccessTokensDBHelper) => {
   userDBHelper = injectedUserDBHelper;
-
   accessTokensDBHelper = injectedAccessTokensDBHelper;
 
   return {

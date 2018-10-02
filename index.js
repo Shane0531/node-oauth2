@@ -25,7 +25,8 @@ const restrictedAreaRoutes = require("./restrictedArea/restrictedAreaRoutes.js")
   restrictedAreaRoutesMethods
 );
 const authRoutesMethods = require("./authorisation/authRoutesMethods")(
-  userDBHelper
+  userDBHelper,
+  accessTokenDBHelper
 );
 const authRoutes = require("./authorisation/authRoutes")(
   express.Router(),
