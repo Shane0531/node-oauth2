@@ -10,11 +10,15 @@ module.exports = () => {
   };
 };
 
-function saveAccessToken(accessToken, userID, callback) {
+function saveAccessToken(accessToken, userID, clientID, callback) {
   db.query(
-    "INSERT INTO user_token (user_idx, token, expiry_date) VALUES (:userID, :accessToken,DATE_ADD(NOW(), INTERVAL 7200 SECOND)) ON DUPLICATE KEY UPDATE token = :accessToken",
+    "INSERT INTO user_token (user_idx, token, expiry_date, client) VALUES (:userID, :accessToken,DATE_ADD(NOW(), INTERVAL 7200 SECOND), :clientID) ON DUPLICATE KEY UPDATE token = :accessToken",
     {
-      replacements: { accessToken: accessToken, userID: userID },
+      replacements: {
+        accessToken: accessToken,
+        userID: userID,
+        clientID: clientID
+      },
       type: db.QueryTypes.INSERT,
       model: accessToken
     }

@@ -6,9 +6,11 @@ module.exports = {
 
 function accessRestrictedArea(req, res) {
   const userId = req.user.id;
+  const client = req.user.client_id;
   Users.findOne({
     where: {
-      idx: userId
+      idx: userId,
+      client: client
     }
   })
     .then(item => {

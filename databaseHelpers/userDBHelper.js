@@ -13,7 +13,6 @@ module.exports = () => {
 
 //TODO 13세미만 허용안되는 로직 추가해야함
 function registerUserInDB(payload, registrationCallback) {
-  console.log(payload);
   const email = payload.email.trim();
   const password = payload.password;
   const nickname = payload.nickname;

@@ -7,7 +7,8 @@ module.exports = (injectedUserDBHelper, injectedAccessTokensDBHelper) => {
   return {
     registerUser: registerUser,
     autoLogin: autoLogin,
-    checkNickname: checkNickname
+    checkNickname: checkNickname,
+    checkEmail: checkEmail
   };
 };
 
@@ -62,24 +63,40 @@ function autoLogin(req, res) {
 }
 
 function checkNickname(req, res) {
-  userDBHelper.doesUserNickname(
-    req.body.nickname,
-    (sqlError, doesUserExist) => {
-      if (sqlError !== null || doesUserExist) {
-        const message =
-          sqlError !== null
-            ? "Operation unsuccessful"
-            : "User Nickname already exists";
+  var query = req.query;
+  userDBHelper.doesUserNickname(query.nickname, (sqlError, doesUserExist) => {
+    if (sqlError !== null || doesUserExist) {
+      const message =
+        sqlError !== null
+          ? "Operation unsuccessful"
+          : "User Nickname already exists";
 
-        const error =
-          sqlError !== null ? sqlError : "User Nickname already exists";
+      const error =
+        sqlError !== null ? sqlError : "User Nickname already exists";
 
-        sendResponse(res, message, sqlError);
-        return;
-      }
-      res.status(200).json({ status: 200 });
+      sendResponse(res, message, sqlError);
+      return;
     }
-  );
+    res.status(200).json({ status: 200 });
+  });
+}
+
+function checkEmail(req, res) {
+  var query = req.query;
+  userDBHelper.doesUserExist(query.email, (sqlError, doesUserExist) => {
+    if (sqlError !== null || doesUserExist) {
+      const message =
+        sqlError !== null
+          ? "Operation unsuccessful"
+          : "User Email already exists";
+
+      const error = sqlError !== null ? sqlError : "User Email already exists";
+
+      sendResponse(res, message, sqlError);
+      return;
+    }
+    res.status(200).json({ status: 200 });
+  });
 }
 
 function sendResponse(res, message, error) {

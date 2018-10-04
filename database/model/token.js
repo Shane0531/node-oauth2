@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const { db } = require("../db");
 
 const accessTokenModel = db.define(
-  "user_token",
+  "access_token",
   {
     idx: {
       type: Sequelize.INTEGER,
@@ -17,6 +17,9 @@ const accessTokenModel = db.define(
     },
     expiry_date: {
       type: Sequelize.DATE
+    },
+    client: {
+      type: Sequelize.STRING
     }
   },
   {
