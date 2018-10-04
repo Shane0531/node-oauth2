@@ -12,7 +12,7 @@ module.exports = () => {
 
 function saveAccessToken(accessToken, userID, clientID, callback) {
   db.query(
-    "INSERT INTO user_token (user_idx, token, expiry_date, client) VALUES (:userID, :accessToken,DATE_ADD(NOW(), INTERVAL 7200 SECOND), :clientID) ON DUPLICATE KEY UPDATE token = :accessToken",
+    "INSERT INTO access_token (user_idx, token, expiry_date, client) VALUES (:userID, :accessToken,DATE_ADD(NOW(), INTERVAL 7200 SECOND), :clientID) ON DUPLICATE KEY UPDATE token = :accessToken",
     {
       replacements: {
         accessToken: accessToken,
@@ -33,7 +33,7 @@ function saveAccessToken(accessToken, userID, clientID, callback) {
 
 function saveAutoLoginToken(token, callback) {
   db.query(
-    "UPDATE user_token SET expiry_date=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE token = :token",
+    "UPDATE access_token SET expiry_date=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE token = :token",
     {
       replacements: { token: token },
       type: db.QueryTypes.UPDATE

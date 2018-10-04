@@ -28,6 +28,6 @@ const accessTokenModel = db.define(
   }
 );
 
-const AccessToken = db.models.user_token;
+const AccessToken = db.models.access_token;
 
 exports.AccessToken = AccessToken;
