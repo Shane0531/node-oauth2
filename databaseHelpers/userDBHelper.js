@@ -1,15 +1,13 @@
 const { db } = require("../database/db");
 const { Users, TermsLevel } = require("../database/model/users");
 const bcrypt = require("bcrypt");
-let mySqlConnection;
 
-module.exports = injectedMySqlConnection => {
-  mySqlConnection = injectedMySqlConnection;
-
+module.exports = () => {
   return {
     registerUserInDB: registerUserInDB,
     getUserFromCrentials: getUserFromCrentials,
-    doesUserExist: doesUserExist
+    doesUserExist: doesUserExist,
+    doesUserNickname: doesUserNickname
   };
 };
 
@@ -68,11 +66,24 @@ function getUserFromCrentials(email, password, callback) {
     });
 }
 
-// TODO 이메일 말고 닉네임도 중복체크를 해야합니다.
 function doesUserExist(email, callback) {
   Users.findOne({
     where: {
       converted_email: email
+    }
+  })
+    .then(item => {
+      callback(null, item ? true : false);
+    })
+    .catch(err => {
+      callback(true, err);
+    });
+}
+
+function doesUserNickname(name, callback) {
+  Users.findOne({
+    where: {
+      name: name
     }
   })
     .then(item => {

@@ -6,10 +6,12 @@ module.exports = (injectedUserDBHelper, injectedAccessTokensDBHelper) => {
   accessTokensDBHelper = injectedAccessTokensDBHelper;
   return {
     registerUser: registerUser,
-    autoLogin: autoLogin
+    autoLogin: autoLogin,
+    checkNickname: checkNickname
   };
 };
 
+//TODO: GEOIP랑 RECAPTCHA 추가해야합니다.
 function registerUser(req, res) {
   userDBHelper.doesUserExist(req.body.email, (sqlError, doesUserExist) => {
     if (sqlError !== null || doesUserExist) {
@@ -22,11 +24,30 @@ function registerUser(req, res) {
 
       return;
     }
-    userDBHelper.registerUserInDB(req.body, () => {
-      const message = "Registration was successful";
 
-      sendResponse(res, message, (error = null));
-    });
+    userDBHelper.doesUserNickname(
+      req.body.nickname,
+      (sqlError, doesUserExist) => {
+        if (sqlError !== null || doesUserExist) {
+          const message =
+            sqlError !== null
+              ? "Operation unsuccessful"
+              : "User Nickname already exists";
+
+          const error =
+            sqlError !== null ? sqlError : "User Nickname already exists";
+
+          sendResponse(res, message, sqlError);
+
+          return;
+        }
+        userDBHelper.registerUserInDB(req.body, () => {
+          const message = "Registration was successful";
+
+          sendResponse(res, message, (error = null));
+        });
+      }
+    );
   });
 }
 
@@ -38,6 +59,27 @@ function autoLogin(req, res) {
       message: "AutoLogin Completed"
     });
   });
+}
+
+function checkNickname(req, res) {
+  userDBHelper.doesUserNickname(
+    req.body.nickname,
+    (sqlError, doesUserExist) => {
+      if (sqlError !== null || doesUserExist) {
+        const message =
+          sqlError !== null
+            ? "Operation unsuccessful"
+            : "User Nickname already exists";
+
+        const error =
+          sqlError !== null ? sqlError : "User Nickname already exists";
+
+        sendResponse(res, message, sqlError);
+        return;
+      }
+      res.status(200).json({ status: 200 });
+    }
+  );
 }
 
 function sendResponse(res, message, error) {

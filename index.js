@@ -1,9 +1,7 @@
 const port = 9999;
 const mySqlConnection = require("./databaseHelpers/mySqlWrapper");
-const accessTokenDBHelper = require("./databaseHelpers/accessTokensDBHelper")(
-  mySqlConnection
-);
-const userDBHelper = require("./databaseHelpers/userDBHelper")(mySqlConnection);
+const accessTokenDBHelper = require("./databaseHelpers/accessTokensDBHelper")();
+const userDBHelper = require("./databaseHelpers/userDBHelper")();
 const oAuthModel = require("./authorisation/accessTokenModel")(
   userDBHelper,
   accessTokenDBHelper

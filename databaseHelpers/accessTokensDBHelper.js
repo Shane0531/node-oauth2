@@ -1,11 +1,8 @@
 const { db } = require("../database/db");
 const Sequelize = require("sequelize");
 const { AccessToken } = require("../database/model/token");
-let mySqlConnection;
 
-module.exports = injectedMySqlConnection => {
-  mySqlConnection = injectedMySqlConnection;
-
+module.exports = () => {
   return {
     saveAccessToken: saveAccessToken,
     getUserIDFromBearerToken: getUserIDFromBearerToken,
