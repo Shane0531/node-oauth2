@@ -57,10 +57,12 @@ function getUserIDFromBearerToken(bearerToken, callback) {
       if (item) {
         const userID = item.dataValues.user_idx;
         const expiredDate = item.dataValues.expiry_date;
+        const client = item.dataValues.client;
         const accessTokens = {
           user: {
             id: userID
           },
+          client: client,
           expires: expiredDate
         };
         callback(false, accessTokens);

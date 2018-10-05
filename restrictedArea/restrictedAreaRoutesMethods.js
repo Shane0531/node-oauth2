@@ -5,25 +5,31 @@ module.exports = {
 };
 
 function accessRestrictedArea(req, res) {
+  const tokenClient = req.oauth.bearerToken.client;
   const userId = req.user.id;
-  const client = req.user.client_id;
-  Users.findOne({
-    where: {
-      idx: userId,
-      client: client
-    }
-  })
-    .then(item => {
-      const result = makeDTO(item);
-      res.status(200).json({
-        content: result
-      });
+  const reqClient = req.body.client;
+  if (tokenClient == reqClient) {
+    Users.findOne({
+      where: {
+        idx: userId
+      }
     })
-    .catch(err => {
-      res.status(401).json({
-        message: "No User"
+      .then(item => {
+        const result = makeDTO(item);
+        res.status(200).json({
+          content: result
+        });
+      })
+      .catch(err => {
+        res.status(401).json({
+          message: "No User"
+        });
       });
+  } else {
+    res.status(401).json({
+      message: "No User"
     });
+  }
 }
 
 //initialReferer 써야하나????
