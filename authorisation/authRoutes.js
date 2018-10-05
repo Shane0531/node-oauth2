@@ -7,6 +7,7 @@ module.exports = (router, expressApp, authRoutesMethods) => {
   router.post("/profile/birthday", authRoutesMethods.changeBirthday);
   router.post("/profile/email", authRoutesMethods.changeEmail);
   router.post("/profile/passwd", authRoutesMethods.changePassword);
+  router.post("/profile", authRoutesMethods.changeProfile);
   router.get("/check/nickname", authRoutesMethods.checkNickname);
   router.get("/check/email", authRoutesMethods.checkEmail);
   return router;

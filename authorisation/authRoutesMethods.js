@@ -13,7 +13,8 @@ module.exports = (injectedUserDBHelper, injectedAccessTokensDBHelper) => {
     changeLocale: changeLocale,
     changeBirthday: changeBirthday,
     changeEmail: changeEmail,
-    changePassword: changePassword
+    changePassword: changePassword,
+    changeProfile: changeProfile
   };
 };
 
@@ -90,6 +91,15 @@ function changeEmail(req, res) {
     res.status(200).json({
       status: 200,
       message: "Email Change Completed"
+    });
+  });
+}
+
+function changeProfile(req, res) {
+  userDBHelper.changeProfile(req.body, () => {
+    res.status(200).json({
+      status: 200,
+      message: "Profile Change Completed"
     });
   });
 }

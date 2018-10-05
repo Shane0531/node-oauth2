@@ -8,6 +8,7 @@ module.exports = () => {
     getUserFromCrentials: getUserFromCrentials,
     doesUserExist: doesUserExist,
     doesUserNickname: doesUserNickname,
+    changeProfile: changeProfile,
     changeLocale: changeLocale,
     changeBirthday: changeBirthday,
     changeEmail: changeEmail,
@@ -102,13 +103,9 @@ function changeLocale(idx, locale, callback) {
       locale: locale
     },
     { where: { idx: idx } }
-  )
-    .then(() => {
-      callback(false, null);
-    })
-    .catch(err => {
-      callback(true, err);
-    });
+  ).then(() => {
+    callback(false, null);
+  });
 }
 
 function changeBirthday(payload, callback) {
@@ -124,13 +121,9 @@ function changeBirthday(payload, callback) {
       birthday: birthDayDate
     },
     { where: { idx: idx } }
-  )
-    .then(() => {
-      callback(false, null);
-    })
-    .catch(err => {
-      callback(true, err);
-    });
+  ).then(() => {
+    callback(false, null);
+  });
 }
 
 function changeEmail(idx, newEmail, callback) {
@@ -140,13 +133,9 @@ function changeEmail(idx, newEmail, callback) {
       converted_email: convertEmail(newEmail)
     },
     { where: { idx: idx } }
-  )
-    .then(() => {
-      callback(false, null);
-    })
-    .catch(err => {
-      callback(true, err);
-    });
+  ).then(() => {
+    callback(false, null);
+  });
 }
 
 function changePassword(idx, passwd, callback) {
@@ -155,13 +144,33 @@ function changePassword(idx, passwd, callback) {
       passwd: passwd
     },
     { where: { idx: idx } }
-  )
-    .then(() => {
-      callback(false, null);
-    })
-    .catch(err => {
-      callback(true, err);
-    });
+  ).then(() => {
+    callback(false, null);
+  });
+}
+
+function changeProfile(payload, callback) {
+  const nickname = payload.nickname;
+  const realname = payload.realname;
+  const countryCode = payload.contryCode;
+  const locale = payload.locale;
+  const picture = payload.picture;
+  const idx = payload.idx;
+
+  Users.update(
+    {
+      name: nickname,
+      real_name: realname,
+      country_code: countryCode,
+      locale: locale,
+      picture: picture
+    },
+    {
+      where: { idx: idx }
+    }
+  ).then(() => {
+    callback(false, null);
+  });
 }
 
 // TODO 회원탈퇴 로직이 정해질때 다시 정의해야할 듯 싶다..
