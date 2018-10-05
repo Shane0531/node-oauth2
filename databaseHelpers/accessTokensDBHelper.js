@@ -6,7 +6,8 @@ module.exports = () => {
   return {
     saveAccessToken: saveAccessToken,
     getUserIDFromBearerToken: getUserIDFromBearerToken,
-    saveAutoLoginToken: saveAutoLoginToken
+    saveAutoLoginToken: saveAutoLoginToken,
+    deleteToken: deleteToken
   };
 };
 
@@ -44,6 +45,20 @@ function saveAutoLoginToken(token, callback) {
     })
     .catch(err => {
       callback(err);
+    });
+}
+
+function deleteToken(token, callback) {
+  AccessToken.destroy({
+    where: {
+      token: token
+    }
+  })
+    .then(() => {
+      callback(true, null);
+    })
+    .catch(err => {
+      callback(false, err);
     });
 }
 

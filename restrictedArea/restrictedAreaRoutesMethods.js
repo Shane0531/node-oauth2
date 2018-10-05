@@ -1,4 +1,4 @@
-const { Users, TermsLevel } = require("../database/model/users");
+const { Users } = require("../database/model/users");
 
 module.exports = {
   accessRestrictedArea: accessRestrictedArea
@@ -43,16 +43,12 @@ function makeDTO(item) {
     insufficientProfile = "realName";
   }
 
-  result["idx"] = item.dataValues.idx;
   result["email"] = item.dataValues.email;
-  result["isLoggedIn"] = true;
   result["profileImageUrl"] = item.dataValues.picture;
   result["nickName"] = item.dataValues.name;
   result["insufficientProfile"] = insufficientProfile;
   result["locale"] = item.dataValues.locale;
   result["grade"] = item.dataValues.grade;
-  result["isActivated"] = item.dataValues.grade == "00" ? false : true;
-  result["needRefreshTerms"] = item.dataValues.terms_level < TermsLevel;
 
   return result;
 }

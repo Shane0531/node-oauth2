@@ -8,7 +8,8 @@ module.exports = (injectedUserDBHelper, injectedAccessTokensDBHelper) => {
     registerUser: registerUser,
     autoLogin: autoLogin,
     checkNickname: checkNickname,
-    checkEmail: checkEmail
+    checkEmail: checkEmail,
+    logout: logout
   };
 };
 
@@ -59,6 +60,23 @@ function autoLogin(req, res) {
       status: 200,
       message: "AutoLogin Completed"
     });
+  });
+}
+
+function logout(req, res) {
+  accessTokensDBHelper.deleteToken(req.body.token, (isDeleted, sqlError) => {
+    if (isDeleted) {
+      res.status(200).json({
+        status: 200,
+        message: "Logout Completed"
+      });
+    } else {
+      res.status(500).json({
+        status: 500,
+        message: "Logout Failed",
+        err: sqlError
+      });
+    }
   });
 }
 

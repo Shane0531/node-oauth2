@@ -50,7 +50,5 @@ const UsersModel = db.define(
 );
 
 const Users = db.models.user;
-const TermsLevel = 1;
 
 exports.Users = Users;
-exports.TermsLevel = TermsLevel;
