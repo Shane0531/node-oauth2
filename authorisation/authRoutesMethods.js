@@ -9,7 +9,11 @@ module.exports = (injectedUserDBHelper, injectedAccessTokensDBHelper) => {
     autoLogin: autoLogin,
     checkNickname: checkNickname,
     checkEmail: checkEmail,
-    logout: logout
+    logout: logout,
+    changeLocale: changeLocale,
+    changeBirthday: changeBirthday,
+    changeEmail: changeEmail,
+    changePassword: changePassword
   };
 };
 
@@ -59,6 +63,42 @@ function autoLogin(req, res) {
     res.status(200).json({
       status: 200,
       message: "AutoLogin Completed"
+    });
+  });
+}
+
+function changeLocale(req, res) {
+  userDBHelper.changeLocale(req.body.idx, req.body.locale, () => {
+    res.status(200).json({
+      status: 200,
+      message: "Locale Change Completed"
+    });
+  });
+}
+
+function changeBirthday(req, res) {
+  userDBHelper.changeBirthday(req.body, () => {
+    res.status(200).json({
+      status: 200,
+      message: "Birthday Change Completed"
+    });
+  });
+}
+
+function changeEmail(req, res) {
+  userDBHelper.changeEmail(req.body.idx, req.body.email, () => {
+    res.status(200).json({
+      status: 200,
+      message: "Email Change Completed"
+    });
+  });
+}
+
+function changePassword(req, res) {
+  userDBHelper.changePassword(req.body.idx, req.body.passwd, () => {
+    res.status(200).json({
+      status: 200,
+      message: "Password Change Completed"
     });
   });
 }

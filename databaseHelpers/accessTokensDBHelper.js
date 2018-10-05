@@ -48,10 +48,26 @@ function saveAutoLoginToken(token, callback) {
     });
 }
 
+//해당 토근 한개 지우기
 function deleteToken(token, callback) {
   AccessToken.destroy({
     where: {
       token: token
+    }
+  })
+    .then(() => {
+      callback(true, null);
+    })
+    .catch(err => {
+      callback(false, err);
+    });
+}
+
+//해당 유저의 모든 토큰 지우기
+function deleteUserAllToken(userIdx, callback) {
+  AccessToken.destroy({
+    where: {
+      user_idx: userIdx
     }
   })
     .then(() => {

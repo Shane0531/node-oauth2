@@ -7,7 +7,11 @@ module.exports = () => {
     registerUserInDB: registerUserInDB,
     getUserFromCrentials: getUserFromCrentials,
     doesUserExist: doesUserExist,
-    doesUserNickname: doesUserNickname
+    doesUserNickname: doesUserNickname,
+    changeLocale: changeLocale,
+    changeBirthday: changeBirthday,
+    changeEmail: changeEmail,
+    changePassword: changePassword
   };
 };
 
@@ -91,6 +95,94 @@ function doesUserNickname(name, callback) {
       callback(true, err);
     });
 }
+
+function changeLocale(idx, locale, callback) {
+  Users.update(
+    {
+      locale: locale
+    },
+    { where: { idx: idx } }
+  )
+    .then(() => {
+      callback(false, null);
+    })
+    .catch(err => {
+      callback(true, err);
+    });
+}
+
+function changeBirthday(payload, callback) {
+  const idx = payload.idx;
+  const birthYear = payload.birthYear;
+  const birthMonth = payload.birthMonth;
+  const birthDay = payload.birthDay;
+  const gender = payload.gender;
+  const birthDayDate = birthYear + "-" + birthMonth + "-" + birthDay;
+  Users.update(
+    {
+      gender: gender,
+      birthday: birthDayDate
+    },
+    { where: { idx: idx } }
+  )
+    .then(() => {
+      callback(false, null);
+    })
+    .catch(err => {
+      callback(true, err);
+    });
+}
+
+function changeEmail(idx, newEmail, callback) {
+  Users.update(
+    {
+      email: newEmail,
+      converted_email: convertEmail(newEmail)
+    },
+    { where: { idx: idx } }
+  )
+    .then(() => {
+      callback(false, null);
+    })
+    .catch(err => {
+      callback(true, err);
+    });
+}
+
+function changePassword(idx, passwd, callback) {
+  Users.update(
+    {
+      passwd: passwd
+    },
+    { where: { idx: idx } }
+  )
+    .then(() => {
+      callback(false, null);
+    })
+    .catch(err => {
+      callback(true, err);
+    });
+}
+
+// TODO 회원탈퇴 로직이 정해질때 다시 정의해야할 듯 싶다..
+// function leaveUser(email, callback) {
+//   Users.update({
+//     email: "탈퇴_" + Math.floor(Math.random() * 100) + "_" + email,
+//     passwd: "탙퇴회원",
+//     name: "-",
+//     real_name: "-",
+//     picture: null,
+//     converted_email: null
+//   }, {
+//     where: {email: email}
+//   })
+//   .then(() => {
+//     callback(false, null);
+//   })
+//   .catch(err => {
+//     callback(true, err);
+//   });
+// }
 
 //Gmail은 .이 낑기든말든 같은 이메일로 인식한다. 따라서 이것들을 걸러내기위해 .이 들어있지않은 필드를 따로 저장하도록한다
 function convertEmail(email) {
