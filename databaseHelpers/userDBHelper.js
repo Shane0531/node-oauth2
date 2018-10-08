@@ -18,27 +18,36 @@ module.exports = () => {
 
 function registerUserInDB(payload, registrationCallback) {
   const email = payload.email.trim();
-  const password = payload.password;
+  const passwd = payload.passwd;
   const nickname = payload.nickname;
   const realname = payload.realname;
   const birthDayDate = payload.birthDayDate;
   const gender = payload.gender;
-  const countryCode = payload.contryCode;
+  const countryCode = payload.countryCode;
   const locale = payload.locale;
 
   Users.create({
     email: email,
-    passwd: password,
+    passwd: passwd,
     name: nickname,
     real_name: realname,
     locale: locale,
-    gender: gender,
+    gender: gender.substring(0, 1),
     country_code: countryCode,
     birthday: birthDayDate,
     converted_email: convertEmail(email)
-  }).then(() => {
-    registrationCallback();
-  });
+  })
+    .then(() => {
+      registrationCallback();
+    })
+    .catch(err => {
+      console.log("ERR : " + err);
+      res.status(500).json({
+        status: 500,
+        message: "SignUp Failed",
+        error: err
+      });
+    });
 }
 
 //TODO 구회원들 비밀번호 !로 시작안하는 것들 따로 분리하는 작업이 필요하다.

@@ -8,6 +8,7 @@ function accessRestrictedArea(req, res) {
   const tokenClient = req.oauth.bearerToken.client;
   const userId = req.user.id;
   const reqClient = req.body.client;
+
   if (tokenClient == reqClient) {
     Users.findOne({
       where: {
@@ -16,7 +17,7 @@ function accessRestrictedArea(req, res) {
     })
       .then(item => {
         res.status(200).json({
-          verify: true
+          userIdx: item.dataValues.idx
         });
       })
       .catch(err => {

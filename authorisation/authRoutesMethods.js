@@ -47,7 +47,7 @@ function registerUser(req, res) {
 
           return;
         }
-        userDBHelper.registerUserInDB(req.body, () => {
+        userDBHelper.registerUserInDB(JSON.parse(req.body.payload), () => {
           const message = "Registration was successful";
 
           sendResponse(res, message, (error = null));
@@ -59,7 +59,7 @@ function registerUser(req, res) {
 
 //자동로그인 기능
 function autoLogin(req, res) {
-  accessTokensDBHelper.saveAutoLoginToken(req.body.token, () => {
+  accessTokensDBHelper.saveAutoLoginToken(JSON.parse(req.body.payload), () => {
     res.status(200).json({
       status: 200,
       message: "AutoLogin Completed"
