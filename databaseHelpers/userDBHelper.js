@@ -16,36 +16,29 @@ module.exports = () => {
   };
 };
 
-//TODO 13세미만 허용안되는 로직 추가해야함
 function registerUserInDB(payload, registrationCallback) {
   const email = payload.email.trim();
   const password = payload.password;
   const nickname = payload.nickname;
   const realname = payload.realname;
-  const birthYear = payload.birthYear;
-  const birthMonth = payload.birthMonth;
-  const birthDay = payload.birthDay;
+  const birthDayDate = payload.birthDayDate;
   const gender = payload.gender;
   const countryCode = payload.contryCode;
   const locale = payload.locale;
-  const reCaptcha = payload.recaptcha;
 
-  const birthDayDate = birthYear + "-" + birthMonth + "-" + birthDay;
-
-  bcrypt.hash(password, bcrypt.genSaltSync(10)).then(hash => {
-    Users.create({
-      email: email,
-      passwd: "!" + hash,
-      name: nickname,
-      real_name: realname,
-      locale: locale,
-      gender: gender,
-      country_code: countryCode,
-      birthday: birthDayDate,
-      converted_email: convertEmail(email)
-    });
+  Users.create({
+    email: email,
+    passwd: password,
+    name: nickname,
+    real_name: realname,
+    locale: locale,
+    gender: gender,
+    country_code: countryCode,
+    birthday: birthDayDate,
+    converted_email: convertEmail(email)
+  }).then(() => {
+    registrationCallback();
   });
-  registrationCallback();
 }
 
 //TODO 구회원들 비밀번호 !로 시작안하는 것들 따로 분리하는 작업이 필요하다.

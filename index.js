@@ -1,5 +1,4 @@
 const port = 9999;
-const mySqlConnection = require("./databaseHelpers/mySqlWrapper");
 const accessTokenDBHelper = require("./databaseHelpers/accessTokensDBHelper")();
 const userDBHelper = require("./databaseHelpers/userDBHelper")();
 const oAuthModel = require("./authorisation/accessTokenModel")(
@@ -35,8 +34,8 @@ const bodyParser = require("body-parser");
 
 expressApp.use(bodyParser.urlencoded({ extended: true }));
 
-expressApp.use("/auth", authRoutes);
-expressApp.use("/restrictedArea", restrictedAreaRoutes);
+expressApp.use("/oauth", authRoutes);
+expressApp.use("/oauth/verify", restrictedAreaRoutes);
 
 expressApp.use(expressApp.oauth.errorHandler());
 

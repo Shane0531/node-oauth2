@@ -18,7 +18,6 @@ module.exports = (injectedUserDBHelper, injectedAccessTokensDBHelper) => {
   };
 };
 
-//TODO: GEOIP랑 RECAPTCHA 추가해야합니다.
 function registerUser(req, res) {
   userDBHelper.doesUserExist(req.body.email, (sqlError, doesUserExist) => {
     if (sqlError !== null || doesUserExist) {

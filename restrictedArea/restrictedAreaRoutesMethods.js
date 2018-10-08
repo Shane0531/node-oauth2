@@ -15,9 +15,8 @@ function accessRestrictedArea(req, res) {
       }
     })
       .then(item => {
-        const result = makeDTO(item);
         res.status(200).json({
-          content: result
+          verify: true
         });
       })
       .catch(err => {
@@ -33,22 +32,22 @@ function accessRestrictedArea(req, res) {
 }
 
 //initialReferer 써야하나????
-function makeDTO(item) {
-  let result = {};
-  let insufficientProfile = null;
-
-  if (item.dataValues.birthday == null) {
-    insufficientProfile = "birthday";
-  } else if (item.dataValues.real_name == "") {
-    insufficientProfile = "realName";
-  }
-
-  result["email"] = item.dataValues.email;
-  result["profileImageUrl"] = item.dataValues.picture;
-  result["nickName"] = item.dataValues.name;
-  result["insufficientProfile"] = insufficientProfile;
-  result["locale"] = item.dataValues.locale;
-  result["grade"] = item.dataValues.grade;
-
-  return result;
-}
+// function makeDTO(item) {
+//   let result = {};
+//   let insufficientProfile = null;
+//
+//   if (item.dataValues.birthday == null) {
+//     insufficientProfile = "birthday";
+//   } else if (item.dataValues.real_name == "") {
+//     insufficientProfile = "realName";
+//   }
+//
+//   result["email"] = item.dataValues.email;
+//   result["profileImageUrl"] = item.dataValues.picture;
+//   result["nickName"] = item.dataValues.name;
+//   result["insufficientProfile"] = insufficientProfile;
+//   result["locale"] = item.dataValues.locale;
+//   result["grade"] = item.dataValues.grade;
+//
+//   return result;
+// }
