@@ -6,18 +6,18 @@ module.exports = {
 
 function accessRestrictedArea(req, res) {
   const tokenClient = req.oauth.bearerToken.client;
-  const userId = req.user.id;
+  const email = req.user.email;
   const reqClient = req.body.client;
 
   if (tokenClient == reqClient) {
     Users.findOne({
       where: {
-        idx: userId
+        email: email
       }
     })
       .then(item => {
         res.status(200).json({
-          userIdx: item.dataValues.idx
+          email: item.dataValues.email
         });
       })
       .catch(err => {

@@ -1,5 +1,6 @@
 const { db } = require("../database/db");
 const { Users } = require("../database/model/users");
+const Op = require("sequelize").Op;
 const bcrypt = require("bcrypt");
 
 module.exports = () => {
@@ -85,16 +86,18 @@ function doesUserExist(email, callback) {
     });
 }
 
-function doesUserNickname(name, callback) {
+function doesUserNickname({ nickname, email }, callback) {
   Users.findOne({
     where: {
-      name: name
+      name: nickname,
+      email: { [Op.ne]: email }
     }
   })
     .then(item => {
       callback(null, item ? true : false);
     })
     .catch(err => {
+      console.log(err);
       callback(true, err);
     });
 }
@@ -140,12 +143,12 @@ function changeEmail(idx, newEmail, callback) {
   });
 }
 
-function changePassword(idx, passwd, callback) {
+function changePassword({ email, passwd }, callback) {
   Users.update(
     {
       passwd: passwd
     },
-    { where: { idx: idx } }
+    { where: { email: email } }
   ).then(() => {
     callback(false, null);
   });

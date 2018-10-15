@@ -104,7 +104,7 @@ function changeProfile(req, res) {
 }
 
 function changePassword(req, res) {
-  userDBHelper.changePassword(req.body.idx, req.body.passwd, () => {
+  userDBHelper.changePassword(JSON.parse(req.body.payload), () => {
     res.status(200).json({
       status: 200,
       message: "Password Change Completed"
@@ -113,25 +113,28 @@ function changePassword(req, res) {
 }
 
 function logout(req, res) {
-  accessTokensDBHelper.deleteToken(req.body.token, (isDeleted, sqlError) => {
-    if (isDeleted) {
-      res.status(200).json({
-        status: 200,
-        message: "Logout Completed"
-      });
-    } else {
-      res.status(500).json({
-        status: 500,
-        message: "Logout Failed",
-        err: sqlError
-      });
+  accessTokensDBHelper.deleteToken(
+    JSON.parse(req.body.payload),
+    (isDeleted, sqlError) => {
+      if (isDeleted) {
+        res.status(200).json({
+          status: 200,
+          message: "Logout Completed"
+        });
+      } else {
+        res.status(500).json({
+          status: 500,
+          message: "Logout Failed",
+          err: sqlError
+        });
+      }
     }
-  });
+  );
 }
 
 function checkNickname(req, res) {
   var query = req.query;
-  userDBHelper.doesUserNickname(query.nickname, (sqlError, doesUserExist) => {
+  userDBHelper.doesUserNickname(query, (sqlError, doesUserExist) => {
     if (sqlError !== null || doesUserExist) {
       const message =
         sqlError !== null
@@ -141,7 +144,11 @@ function checkNickname(req, res) {
       const error =
         sqlError !== null ? sqlError : "User Nickname already exists";
 
-      sendResponse(res, message, sqlError);
+      res.status(message == "User Nickname already exists" ? 400 : 200).json({
+        status: message == "User Nickname already exists" ? 400 : 200,
+        message: message,
+        error: error
+      });
       return;
     }
     res.status(200).json({ status: 200 });
@@ -159,7 +166,11 @@ function checkEmail(req, res) {
 
       const error = sqlError !== null ? sqlError : "User Email already exists";
 
-      sendResponse(res, message, sqlError);
+      res.status(error == null ? 200 : 400).json({
+        status: message == "User Email already exists" ? 400 : 200,
+        message: message,
+        error: error
+      });
       return;
     }
     res.status(200).json({ status: 200 });

@@ -50,7 +50,7 @@ function saveAutoLoginToken(payload, callback) {
 }
 
 //해당 토근 한개 지우기
-function deleteToken(token, callback) {
+function deleteToken({ token }, callback) {
   AccessToken.destroy({
     where: {
       token: token
