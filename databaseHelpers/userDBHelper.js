@@ -33,7 +33,7 @@ function registerUserInDB(payload, registrationCallback) {
     name: nickname,
     real_name: realname,
     locale: locale,
-    gender: gender.substring(0, 1),
+    gender: gender,
     country_code: countryCode,
     birthday: birthDayDate,
     converted_email: convertEmail(email)
@@ -102,42 +102,36 @@ function doesUserNickname({ nickname, email }, callback) {
     });
 }
 
-function changeLocale(idx, locale, callback) {
+function changeLocale({ email, locale }, callback) {
   Users.update(
     {
       locale: locale
     },
-    { where: { idx: idx } }
+    { where: { email: email } }
   ).then(() => {
     callback(false, null);
   });
 }
 
-function changeBirthday(payload, callback) {
-  const idx = payload.idx;
-  const birthYear = payload.birthYear;
-  const birthMonth = payload.birthMonth;
-  const birthDay = payload.birthDay;
-  const gender = payload.gender;
-  const birthDayDate = birthYear + "-" + birthMonth + "-" + birthDay;
+function changeBirthday({ email, gender, birthday }, callback) {
   Users.update(
     {
       gender: gender,
-      birthday: birthDayDate
+      birthday: birthday
     },
-    { where: { idx: idx } }
+    { where: { email: email } }
   ).then(() => {
     callback(false, null);
   });
 }
 
-function changeEmail(idx, newEmail, callback) {
+function changeEmail({ email, newEmail }, callback) {
   Users.update(
     {
       email: newEmail,
       converted_email: convertEmail(newEmail)
     },
-    { where: { idx: idx } }
+    { where: { email: email } }
   ).then(() => {
     callback(false, null);
   });
@@ -154,14 +148,10 @@ function changePassword({ email, passwd }, callback) {
   });
 }
 
-function changeProfile(payload, callback) {
-  const nickname = payload.nickname;
-  const realname = payload.realname;
-  const countryCode = payload.contryCode;
-  const locale = payload.locale;
-  const picture = payload.picture;
-  const idx = payload.idx;
-
+function changeProfile(
+  { email, nickname, realname, countryCode, locale, picture },
+  callback
+) {
   Users.update(
     {
       name: nickname,
@@ -171,7 +161,7 @@ function changeProfile(payload, callback) {
       picture: picture
     },
     {
-      where: { idx: idx }
+      where: { email: email }
     }
   ).then(() => {
     callback(false, null);

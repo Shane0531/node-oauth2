@@ -14,6 +14,12 @@ expressApp.oauth = oAuth2Server({
   debug: true,
   accessTokenLifetime: 7200
 });
+//임시
+expressApp.all("/*", function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
 const restrictedAreaRoutesMethods = require("./restrictedArea/restrictedAreaRoutesMethods.js");
 const restrictedAreaRoutes = require("./restrictedArea/restrictedAreaRoutes.js")(

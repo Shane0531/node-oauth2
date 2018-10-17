@@ -19,41 +19,10 @@ module.exports = (injectedUserDBHelper, injectedAccessTokensDBHelper) => {
 };
 
 function registerUser(req, res) {
-  userDBHelper.doesUserExist(req.body.email, (sqlError, doesUserExist) => {
-    if (sqlError !== null || doesUserExist) {
-      const message =
-        sqlError !== null ? "Operation unsuccessful" : "User already exists";
+  userDBHelper.registerUserInDB(JSON.parse(req.body.payload), () => {
+    const message = "Registration was successful";
 
-      const error = sqlError !== null ? sqlError : "User already exists";
-
-      sendResponse(res, message, sqlError);
-
-      return;
-    }
-
-    userDBHelper.doesUserNickname(
-      req.body.nickname,
-      (sqlError, doesUserExist) => {
-        if (sqlError !== null || doesUserExist) {
-          const message =
-            sqlError !== null
-              ? "Operation unsuccessful"
-              : "User Nickname already exists";
-
-          const error =
-            sqlError !== null ? sqlError : "User Nickname already exists";
-
-          sendResponse(res, message, sqlError);
-
-          return;
-        }
-        userDBHelper.registerUserInDB(JSON.parse(req.body.payload), () => {
-          const message = "Registration was successful";
-
-          sendResponse(res, message, (error = null));
-        });
-      }
-    );
+    sendResponse(res, message, (error = null));
   });
 }
 
@@ -68,7 +37,7 @@ function autoLogin(req, res) {
 }
 
 function changeLocale(req, res) {
-  userDBHelper.changeLocale(req.body.idx, req.body.locale, () => {
+  userDBHelper.changeLocale(JSON.parse(req.body.payload), () => {
     res.status(200).json({
       status: 200,
       message: "Locale Change Completed"
@@ -77,7 +46,7 @@ function changeLocale(req, res) {
 }
 
 function changeBirthday(req, res) {
-  userDBHelper.changeBirthday(req.body, () => {
+  userDBHelper.changeBirthday(JSON.parse(req.body.payload), () => {
     res.status(200).json({
       status: 200,
       message: "Birthday Change Completed"
@@ -86,7 +55,7 @@ function changeBirthday(req, res) {
 }
 
 function changeEmail(req, res) {
-  userDBHelper.changeEmail(req.body.idx, req.body.email, () => {
+  userDBHelper.changeEmail(JSON.parse(req.body.payload), () => {
     res.status(200).json({
       status: 200,
       message: "Email Change Completed"
@@ -95,7 +64,7 @@ function changeEmail(req, res) {
 }
 
 function changeProfile(req, res) {
-  userDBHelper.changeProfile(req.body, () => {
+  userDBHelper.changeProfile(JSON.parse(req.body.payload), () => {
     res.status(200).json({
       status: 200,
       message: "Profile Change Completed"

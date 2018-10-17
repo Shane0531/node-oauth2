@@ -32,8 +32,7 @@ function saveAccessToken(accessToken, userID, clientID, callback) {
     });
 }
 
-function saveAutoLoginToken(payload, callback) {
-  const token = payload.token;
+function saveAutoLoginToken({ token }, callback) {
   db.query(
     "UPDATE access_token SET expiry_date=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE token = :token",
     {

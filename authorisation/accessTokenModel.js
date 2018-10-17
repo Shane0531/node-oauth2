@@ -40,7 +40,7 @@ function getUser(username, password, callback) {
 function saveAccessToken(accessToken, clientID, expires, user, callback) {
   accessTokensDBHelper.saveAccessToken(
     accessToken,
-    user.email,
+    user.idx,
     clientID,
     callback
   );
